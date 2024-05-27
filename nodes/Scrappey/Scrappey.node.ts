@@ -77,6 +77,13 @@ export class Scrappey implements INodeType {
 				if (operation === 'request.get') {
 					const requestUrl = this.getNodeParameter('url', 0) as string;
 
+					const includeImages = this.getNodeParameter('includeImages', 0) as string;
+					const includeLinks = this.getNodeParameter('includeLinks', 0) as string;
+
+					const session = this.getNodeParameter('session', 0) as string | null; // optional
+					const proxyCountry = this.getNodeParameter('proxyCountry', 0) as string | null; // optional
+					console.log(proxyCountry)
+
 					const options: OptionsWithUri = {
 						headers: {
 							Accept: 'application/json',
@@ -84,13 +91,18 @@ export class Scrappey implements INodeType {
 						method: 'POST',
 						body: {
 							"cmd": operation,
-							"url": requestUrl
+							"url": requestUrl,
+							"includeImages": includeImages,
+							"includeLinks": includeLinks,
 						},
 						uri: `https://${endpoint}?key=${apiKey}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.requestWithAuthentication.call(this, 'scrappeyApi',	options, );
+					// add optional arguments to the request body
+					if (session !== null) options.body.session = session;
+
+					responseData = await this.helpers.requestWithAuthentication.call(this, 'scrappeyApi',	options);
 					returnData.push(responseData);
 				}
 

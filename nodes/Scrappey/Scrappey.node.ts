@@ -82,6 +82,7 @@ export class Scrappey implements INodeType {
 
 					const session = this.getNodeParameter('session', 0) as string | null; // optional
 					const proxyCountry = this.getNodeParameter('proxyCountry', 0) as string | null; // optional
+					const autoparsePrompt = this.getNodeParameter('autoparsePrompt', 0) as string | null; // optional
 					console.log(proxyCountry)
 
 					const options: OptionsWithUri = {
@@ -101,6 +102,11 @@ export class Scrappey implements INodeType {
 
 					// add optional arguments to the request body
 					if (session !== null) options.body.session = session;
+
+					if (autoparsePrompt !== null) {
+						options.body.autoparse = true
+						options.body.properties = autoparsePrompt
+					}
 
 					responseData = await this.helpers.requestWithAuthentication.call(this, 'scrappeyApi',	options);
 					returnData.push(responseData);

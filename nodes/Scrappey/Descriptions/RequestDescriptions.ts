@@ -163,4 +163,17 @@ export const RequestFields: INodeProperties[] = [
 			},
 		},
 	},
+	{
+		displayName: 'Autoparse (with AI)',
+		name: 'autoparsePrompt',
+		type: 'string',
+		default: '',
+		description: 'Type a command that the AI will try to fetch from this page. Example: Get the product name and product article number.',
+		displayOptions: {
+			show: {
+				resource: ['request'],
+				operation: ['request.get'],
+			},
+		},
+	},
 ];

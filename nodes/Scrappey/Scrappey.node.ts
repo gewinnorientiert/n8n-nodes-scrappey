@@ -74,9 +74,24 @@ export class Scrappey implements INodeType {
 
 			// REQUEST
 			if (resource === 'request') {
-
 				if (operation === 'request.get') {
+					const requestUrl = this.getNodeParameter('url', 0) as string;
 
+					const options: OptionsWithUri = {
+						headers: {
+							Accept: 'application/json',
+						},
+						method: 'POST',
+						body: {
+							"cmd": operation,
+							"url": requestUrl
+						},
+						uri: `https://${endpoint}?key=${apiKey}`,
+						json: true,
+					};
+
+					responseData = await this.helpers.requestWithAuthentication.call(this, 'scrappeyApi',	options, );
+					returnData.push(responseData);
 				}
 
 				if (operation === 'request.post') {
@@ -122,7 +137,6 @@ export class Scrappey implements INodeType {
 						uri: `https://${endpoint}?key=${apiKey}`,
 						json: true,
 					};
-					console.log(options.body)
 
 					responseData = await this.helpers.requestWithAuthentication.call(this, 'scrappeyApi',	options, );
 					returnData.push(responseData);
